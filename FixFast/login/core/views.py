@@ -135,6 +135,8 @@ from django.http import HttpResponse
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from .models import ConfiguracionCorreo
+
 
 def enviar_correo(request):
     if request.method == 'POST':
@@ -145,6 +147,16 @@ def enviar_correo(request):
         destinatario = request.POST.get('destinatario')
         asunto = 'FixFast te da la Bienvenida'
         cuerpo = 'Servidor STMP configurado correctamente'
+
+                # Guardar configuración de correo en la base de datos
+        configuracion, created = ConfiguracionCorreo.objects.get_or_create(
+            smtp_host=smtp_host,
+            smtp_port=smtp_port,
+            smtp_user=smtp_user,
+            smtp_password=smtp_password
+        )
+        configuracion.smtp_password = smtp_password  # Actualizamos la contraseña
+        configuracion.save()
 
         # Crear el mensaje
         mensaje = MIMEMultipart()
@@ -177,3 +189,5 @@ def notificaciones(request):
 #perfil de usuario
 def perfildeusuario(request):
     return render(request, 'core/perfildeusuario.html')
+
+

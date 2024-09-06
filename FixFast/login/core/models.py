@@ -35,6 +35,14 @@ class Ticket(models.Model):
     )
     # nos permite cerrar el ticket 
     closed = models.BooleanField(default=False)
-    
+
+
+#modelo para guardar los datos de servidor SMTP
+class ConfiguracionCorreo(models.Model):
+    smtp_host = models.CharField(max_length=255)
+    smtp_port = models.IntegerField()
+    smtp_user = models.CharField(max_length=255)
+    smtp_password = models.CharField(max_length=255) 
+
     def __str__(self):
         return self.title
