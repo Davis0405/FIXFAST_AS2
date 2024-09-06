@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import home, products, exit, creaciondeticket, alltickets, configuracion, ticketscerrados, configuraciondecorreo, configure_smtp, enviar_correo1
-from .views import notificaciones, perfildeusuario
+from .views import notificaciones, perfildeusuario, lista_usuarios, agregaruser, editaruser, eliminarticket, eliminaruser, editarticket, listatickets
 from django.conf import settings
 from django.conf.urls.static import static
 #formulario 
@@ -36,6 +36,15 @@ urlpatterns = [
    path('enviar-correo/', views.enviar_correo, name='enviar_correo'),
    path('notificaciones/', notificaciones, name='notificaciones'),
    path('perfil-usuario/', perfildeusuario, name='Perfil_usuario'),
+   path('listaticket/', listatickets, name='listatickets'),
+   path('editarticket/<int:ticket_id>/', editarticket, name='editarticket'),
+   path('eliminarticket/<int:ticket_id>/', eliminarticket, name='eliminarticket'),
+   path('eliminaruser/<int:user_id>/', eliminaruser, name='eliminaruser'),
+   path('editaruser/<int:user_id>/', editaruser, name='editaruser'),
+   path('agregaruser/<int:user_id>/', agregaruser, name='agregaruser'),
+   path('listauser/', lista_usuarios, name='listauser'),
+   path('configuraciondecorreo/', configuraciondecorreo, name='configuraciondecorreo'),#pagina para configurar correo pop3
+   path('configuracion-correo/', views.configurar_correo, name='configuracion_correo')
 
    
 ]

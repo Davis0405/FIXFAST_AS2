@@ -27,6 +27,24 @@ def ticketscerrados(request):
 def configuraciondecorreo(request):     
     return render(request, 'core/configuraciondecorreo.html')
 
+def lista_tickets(request):     
+    return render(request, 'core/listaticket.html')
+
+def lista_tickets(request):     
+    return render(request, 'core/editarticket.html') 
+
+def lista_usuarios(request):     
+    return render(request, 'core/lista_usuarios.html')
+
+def editaruser(request):     
+    return render(request, 'core/editaruser.html')
+
+def editaruser(request):     
+    return render(request, 'core/agregaruser.html')
+
+def editaruser(request):     
+    return render(request, 'core/eliminaruser.html')
+
 @login_required
 def products(request):
     return render(request, 'core/products.html')
@@ -191,3 +209,107 @@ def perfildeusuario(request):
     return render(request, 'core/perfildeusuario.html')
 
 
+#logica de francisco
+
+def listatickets(request):
+    tickets = Ticket.objects.all()  # Obtén todos los objetos de la tabla ticket
+    return render(request, 'core/listaticket.html', {'tickets': tickets})
+#editar tickets
+from django.shortcuts import get_object_or_404, redirect
+from .models import Ticket
+
+def editarticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, pk=ticket_id)
+    if request.method == 'POST':
+        ticket.id = request.POST['id']
+        ticket.title = request.POST['title']
+        ticket.description = request.POST['description']
+        ticket.save()
+        return redirect('listatickets')
+    return render(request, 'editarticket.html', {'ticket': Ticket})
+
+# core/views.py
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import Ticket  # Asegúrate de importar tu modelo
+
+def eliminarticket(request, ticket_id):
+    # Obtener el producto o devolver un 404 si no existe
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+
+    # Eliminar el producto
+    ticket.delete()
+
+    # Enviar un mensaje de éxito (opcional)
+    messages.success(request, f'El ticket "{ticket.title}" ha sido eliminado con éxito.')
+
+    # Redirigir a la lista de productos
+    return redirect('listatickets')  # Asegúrate de que este nombre coincida con tu URL para la lista de productos
+
+
+
+#-----------------------
+#-------------------
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.models import User
+
+def lista_usuarios(request):
+    usuarios = User.objects.all()  # Captura todos los usuarios de la base de datos
+    return render(request, 'core/lista_usuarios.html', {'usuarios': usuarios})
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+from django.shortcuts import render, redirect
+from .forms import User
+
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+ # Asegúrate de importar tu modelo
+
+def eliminaruser(request, user_id):
+    # Obtener el producto o devolver un 404 si no existe
+    usuarios = get_object_or_404(User, id=user_id)
+
+    # Eliminar el producto
+    usuarios.delete()
+
+    # Enviar un mensaje de éxito (opcional)
+    messages.success(request, f'El usuario "{usuarios.username}" ha sido eliminado con éxito.')
+
+    # Redirigir a la lista de productos
+    return redirect('listauser')  # Asegúrate de que este nombre coincida con tu URL para la lista de productos
+
+
+
+def editaruser(request, user_id):
+    usuarios = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        usuarios.username = request.POST['username']
+        usuarios.last_name = request.POST['last_name']
+        usuarios.email = request.POST['email']
+        usuarios.save()
+        return redirect('listauser')
+    return render(request, 'editaruser.html', {'usuarios': usuarios})
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+
+def agregaruser(request, user_id):
+    usuarios = get_object_or_404(User, pk=user_id)
+    if request.method == 'POST':
+        usuarios.username = request.POST['username']
+        usuarios.last_name = request.POST['last_name']
+        usuarios.email = request.POST['email']
+        usuarios.save()
+        return redirect('listauser')
+    return render(request, 'agregaruser.html', {'usuarios': usuarios})
