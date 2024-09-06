@@ -268,8 +268,6 @@ from django.shortcuts import render, redirect
 from .forms import User
 
 
-
-
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -313,3 +311,54 @@ def agregaruser(request, user_id):
         usuarios.save()
         return redirect('listauser')
     return render(request, 'agregaruser.html', {'usuarios': usuarios})
+
+#parte logica para los reportes
+
+def reportes(request):
+    return render(request, 'core/reportes.html')
+
+import csv
+from django.http import HttpResponse
+from core.models import Ticket  # Asegúrate de que este sea tu modelo
+
+def exportar_csv(request):
+    # Crear la respuesta con tipo de contenido CSV
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="tickets.csv"'
+
+    # Crear el escritor CSV
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'Título', 'Descripción', 'Prioridad', 'Asignado', 'Categoría', 'Cerrado'])
+
+    # Obtener todos los tickets y escribir las filas
+    tickets = Ticket.objects.all().values_list('id', 'title', 'description', 'priority', 'asignar', 'categorias', 'closed')
+    for ticket in tickets:
+        writer.writerow(ticket)
+
+    return response
+
+import openpyxl
+from django.http import HttpResponse
+from core.models import Ticket
+
+def exportar_excel(request):
+    # Crear un archivo Excel
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = 'Tickets'
+
+    # Agregar los encabezados
+    ws.append(['ID', 'Título', 'Descripción', 'Prioridad', 'Asignado', 'Categoría', 'Cerrado'])
+
+    # Obtener todos los tickets y escribir las filas
+    tickets = Ticket.objects.all().values_list('id', 'title', 'description', 'priority', 'asignar', 'categorias', 'closed')
+    for ticket in tickets:
+        ws.append(ticket)
+
+    # Preparar la respuesta HTTP para descargar el archivo Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename="tickets.xlsx"'
+    
+    wb.save(response)
+    return response
+
