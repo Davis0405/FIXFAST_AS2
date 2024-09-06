@@ -20,11 +20,6 @@ def enviar_notificacion_ticket(ticket):
     smtp_user = configuracion.smtp_user
     smtp_password = configuracion.smtp_password
 
-    print(f"SMTP Host: {smtp_host}")
-    print(f"SMTP Port: {smtp_port}")
-    print(f"SMTP User: {smtp_user}")
-    print(f"SMTP Password: {smtp_password}") 
-
     destinatario = 'steed.galvez@gmail.com'  # Cambia esto por la dirección de correo de destino
     asunto = f'Nuevo Ticket Creado: {ticket.title}'
     cuerpo = f"""
