@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'dbbackup',
     
     
 ]
@@ -79,8 +80,15 @@ WSGI_APPLICATION = 'login.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+
+        'ENGINE': 'django.db.backends.mysql',  # Cambia esto para usar MySQL
+        'NAME': 'FixFast',  # Nombre de la base de datos en MySQL
+        'USER': 'root',            # Usuario de MySQL
+        'PASSWORD': 'Perezoso2000',     # Contraseña de MySQL
+        'HOST': 'localhost',                   # O la dirección del servidor MySQL
+        'PORT': '3306',
     }
 }
 
@@ -153,3 +161,7 @@ EMAIL_HOST_USER = 'soportenatur2024@outlook.es'  # Tu dirección de correo elect
 EMAIL_HOST_PASSWORD = 'Invierno.2020'  # La contraseña de tu cuenta de Gmail o una contraseña de aplicación si tienes la autenticación de dos factores habilitada
 # APPEND_SLASH = False
 
+# settings.py
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': 'C:\\Users\\davis.hernandez-x\\Downloads\\BK_sqlite_FixFast'}
