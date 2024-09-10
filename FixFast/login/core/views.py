@@ -362,3 +362,32 @@ def exportar_excel(request):
     wb.save(response)
     return response
 
+
+# views.py
+
+import jwt
+import time
+from django.conf import settings
+from django.shortcuts import render
+
+# def reportes(request):
+#     return render(request, 'core/reportes.html')
+
+def metabase_dashboard_view(request):
+    METABASE_SITE_URL = "http://10.10.20.54:3000"
+    METABASE_SECRET_KEY = "b1cf8c73295996b2e4a34ac1a7a367e67c6cc9c4151d82cd3da24b9fb38cbddd"
+
+    payload = {
+        "resource": {"dashboard": 1},  # Cambia el ID del dashboard según sea necesario
+        "params": {},
+        "exp": round(time.time()) + (60 * 10)  # Expira en 10 minutos
+    }
+
+    # Generar el token JWT
+    token = jwt.encode(payload, METABASE_SECRET_KEY, algorithm="HS256")
+
+    # Ya no es necesario decodificar el token porque es una cadena
+    iframe_url = f"{METABASE_SITE_URL}/embed/dashboard/{token}#theme=night&bordered=true&titled=true"
+
+    # Pasar la URL del iframe al template
+    return render(request, 'core/metabase_dashboard.html', {'iframe_url': iframe_url})

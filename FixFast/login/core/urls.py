@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import home, products, exit, creaciondeticket, alltickets, configuracion, ticketscerrados, configuraciondecorreo, configure_smtp, enviar_correo1
 from .views import notificaciones, perfildeusuario, lista_usuarios, agregaruser, editaruser, eliminarticket, eliminaruser, editarticket, listatickets, reportes
-from .views import exportar_csv, exportar_excel
+from .views import exportar_csv, exportar_excel, metabase_dashboard_view
 from django.conf import settings
 from django.conf.urls.static import static
 #formulario 
@@ -48,7 +48,8 @@ urlpatterns = [
    path('configuracion-correo/', views.configurar_correo, name='configuracion_correo'),
    path('reportes/', reportes, name='reportes'),
    path('exportar/csv/', exportar_csv, name='exportar_csv'),
-   path('exportar/excel/', exportar_excel, name='exportar_excel'),  
+   path('exportar/excel/', exportar_excel, name='exportar_excel'),
+   path('metabase/', metabase_dashboard_view, name='metabase_dashboard'),
 ]
 
 if settings.DEBUG:
