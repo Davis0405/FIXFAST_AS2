@@ -9,6 +9,7 @@
 <body>
 
     <li><a href={% url 'home' %}>Inicio</a></li>
+
 {% for ticket in tickets %}
 
 <div class="card">
@@ -29,21 +30,48 @@
       <div class="ticket-due-date">categoria:  {{ ticket.categorias }}</div>
     </div>
 </div>
+
+<form action="{% url 'editarticket1' ticket.id %}" method="post">
+  {% csrf_token %}
+  <!-- Se incluyen los campos de título y descripción para ser enviados al servidor -->
+  <input type="hidden" name="title" value="{{ ticket.title }}">
+  <input type="hidden" name="description" value="{{ ticket.description }}">
+  <label for="title">Modificar Título:</label>
+  <input type="text" id="title" name="title" value="{{ ticket.title }}">
+      <!-- Campo modificable para 'description' -->
+      <label for="description">Modificar Descripción:</label>
+      <textarea id="description" name="description">{{ ticket.description }}</textarea>
+  
+      <!-- Campo modificable para 'Assigned to' -->
+      <label for="asignar">Modificar Asignado a:</label>
+      <select id="asignar" name="asignar">
+          <option value="Davis Hernandez" {% if ticket.asignar == "Davis Hernandez" %}selected{% endif %}>Davis Hernandez</option>
+          <option value="Libby Arias" {% if ticket.asignar == "Libby Arias" %}selected{% endif %}>Libby Arias</option>
+          <option value="Katherine Monterroso" {% if ticket.asignar == "Katherine Monterroso" %}selected{% endif %}>Katherine Monterroso</option>
+          <option value="Daniel Hall" {% if ticket.asignar == "Daniel Hall" %}selected{% endif %}>Daniel Hall</option>
+          <option value="Daniel Hall" {% if ticket.asignar == "Daniel Hall" %}selected{% endif %}>Francisco</option>
+          <option value="Daniel Hall" {% if ticket.asignar == "Daniel Hall" %}selected{% endif %}>Francisco</option>
+      </select>
+  
+      <!-- Campo modificable para 'Prioridad' -->
+      <label for="priority">Modificar Prioridad:</label>
+      <input type="text" id="priority" name="priority" value="{{ ticket.priority }}">
+  
+      <!-- Campo modificable para 'Categoría' -->
+      <label for="categorias">Modificar Categoría:</label>
+      <input type="text" id="categorias" name="categorias" value="{{ ticket.categorias }}">
+  
+  <button type="submit">Guardar Cambios</button>
+  <br>
+  <br>
+</form>
+
 <form action="{% url 'cerrar_ticket' ticket.id %}" method="post">
     {% csrf_token %}
     <button type="submit">Cerrar Ticket</button>
     <br>
     <br>
 </form>
-
-<!-- <div class="form-group">
-  <label for="priority">Priority:</label>
-  <select id="priority" name="priority" required>
-      <option value="low">Baja</option>
-      <option value="medium">Medio</option>
-      <option value="high">Alta</option>
-  </select>
-</div> -->
 
 {% endfor %}
 

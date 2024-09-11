@@ -35,6 +35,8 @@ class Ticket(models.Model):
     )
     # nos permite cerrar el ticket 
     closed = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)  # Agrega la fecha y hora de creación
+    date_modified = models.DateTimeField(auto_now=True) 
 
 
 #modelo para guardar los datos de servidor SMTP
@@ -43,6 +45,13 @@ class ConfiguracionCorreo(models.Model):
     smtp_port = models.IntegerField()
     smtp_user = models.CharField(max_length=255)
     smtp_password = models.CharField(max_length=255) 
+
+
+class servidorpop(models.Model):
+    pop_server = models.CharField(max_length=255)
+    port = models.CharField(max_length=255)
+    username = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
 
     def __str__(self):
         return self.title

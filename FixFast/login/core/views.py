@@ -47,7 +47,7 @@ def editaruser(request):
 
 @login_required
 def products(request):
-    return render(request, 'core/products.html')
+    return render(request, 'core/metabase_dashboard.html')
 
 #parte del formulario 
 def exit(request):
@@ -133,7 +133,7 @@ def configurar_correo(request):
         correo_thread.start()
 
         # Redirigir al usuario a la página de inicio después de iniciar el hilo
-        return redirect('products')
+        return redirect('metabase_dashboard')
 
     # Renderizar el formulario HTML
     return render(request, 'configuracion_correo.html')
@@ -226,7 +226,7 @@ def editarticket(request, ticket_id):
         ticket.description = request.POST['description']
         ticket.save()
         return redirect('listatickets')
-    return render(request, 'editarticket.html', {'ticket': Ticket})
+    return render(request, 'core/editarticket.html', {'ticket': Ticket})
 
 # core/views.py
 
@@ -260,12 +260,12 @@ def lista_usuarios(request):
     return render(request, 'core/lista_usuarios.html', {'usuarios': usuarios})
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.models import User
+# from django.contrib.auth.forms import UserCreationForm
 
-from django.shortcuts import render, redirect
-from .forms import User
+# from django.shortcuts import render, redirect
+# from .forms import User
 
 
 from django.shortcuts import get_object_or_404, redirect
@@ -370,15 +370,12 @@ import time
 from django.conf import settings
 from django.shortcuts import render
 
-# def reportes(request):
-#     return render(request, 'core/reportes.html')
-
 def metabase_dashboard_view(request):
     METABASE_SITE_URL = "http://10.10.20.54:3000"
     METABASE_SECRET_KEY = "b1cf8c73295996b2e4a34ac1a7a367e67c6cc9c4151d82cd3da24b9fb38cbddd"
 
     payload = {
-        "resource": {"dashboard": 1},  # Cambia el ID del dashboard según sea necesario
+        "resource": {"dashboard": 2},  # Cambia el ID del dashboard según sea necesario
         "params": {},
         "exp": round(time.time()) + (60 * 10)  # Expira en 10 minutos
     }
@@ -387,7 +384,31 @@ def metabase_dashboard_view(request):
     token = jwt.encode(payload, METABASE_SECRET_KEY, algorithm="HS256")
 
     # Ya no es necesario decodificar el token porque es una cadena
-    iframe_url = f"{METABASE_SITE_URL}/embed/dashboard/{token}#theme=night&bordered=true&titled=true"
+    iframe_url = f"{METABASE_SITE_URL}/embed/dashboard/{token}#bordered=true&titled=true"
 
     # Pasar la URL del iframe al template
     return render(request, 'core/metabase_dashboard.html', {'iframe_url': iframe_url})
+
+
+def editarticket1(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    
+    if request.method == 'POST':
+        # Obtener los valores del formulario
+        new_title = request.POST.get('title')
+        new_description = request.POST.get('description')
+        new_asignar = request.POST.get('asignar')
+        new_priority = request.POST.get('priority')
+        new_categoria = request.POST.get('categorias')
+        
+        # Actualizar los valores del ticket
+        ticket.title = new_title
+        ticket.description = new_description
+        ticket.asignar = new_asignar
+        ticket.priority = new_priority
+        ticket.categorias = new_categoria
+        ticket.save()
+        
+        return redirect('alltickets')  # Redirigir a la página de inicio o donde desees
+
+    return render(request, 'alltickets.html', {'ticket': ticket})

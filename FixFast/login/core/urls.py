@@ -38,7 +38,7 @@ urlpatterns = [
    path('notificaciones/', notificaciones, name='notificaciones'),
    path('perfil-usuario/', perfildeusuario, name='Perfil_usuario'),
    path('listaticket/', listatickets, name='listatickets'),
-   path('editarticket/<int:ticket_id>/', editarticket, name='editarticket'),
+   # path('editarticket/<int:ticket_id>/', editarticket, name='editarticket'),
    path('eliminarticket/<int:ticket_id>/', eliminarticket, name='eliminarticket'),
    path('eliminaruser/<int:user_id>/', eliminaruser, name='eliminaruser'),
    path('editaruser/<int:user_id>/', editaruser, name='editaruser'),
@@ -49,7 +49,8 @@ urlpatterns = [
    path('reportes/', reportes, name='reportes'),
    path('exportar/csv/', exportar_csv, name='exportar_csv'),
    path('exportar/excel/', exportar_excel, name='exportar_excel'),
-   path('metabase/', metabase_dashboard_view, name='metabase_dashboard'),
+   path('Dashboard/', metabase_dashboard_view, name='metabase_dashboard'),
+   path('editarticket/<int:ticket_id>/', views.editarticket1, name='editarticket1'),
 ]
 
 if settings.DEBUG:
